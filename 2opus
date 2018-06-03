@@ -1,0 +1,12 @@
+#!/bin/bash
+
+if [ -n "$2" ]; then
+  bitrate=$2
+else
+  bitrate=128
+fi
+
+input="$1"
+filename="${input%.*}"
+
+ffmpeg -i "$input"  -b:a "${bitrate}000" -c opus -vbr on -compression_level 10 -application audio "$filename.ogg"

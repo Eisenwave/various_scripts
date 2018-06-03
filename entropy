@@ -1,0 +1,19 @@
+#!/usr/bin/python3
+
+import sys
+import math
+
+if __name__ == "__main__":
+    inputs = [arg.split("x", 1) for arg in sys.argv[1:]]
+    prop_mult_list = [(float(e[0]), eval(e[1])) if len(e) > 1 else (1, eval(e[0])) for e in inputs]
+    
+    result = 0
+    for e in prop_mult_list:
+        multiplier = e[0]
+        propability = e[1]
+        
+        if multiplier > 0 and propability > 0:
+            ld = math.log(1 / propability, 2)
+            result += multiplier * propability * ld
+    
+    print(result)

@@ -1,0 +1,7 @@
+#!/bin/bash
+
+find -type d -exec echo {} ";"
+
+#find -D tree -type d | while read d; do
+#    echo $d
+#done

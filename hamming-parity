@@ -1,0 +1,21 @@
+#!/usr/bin/python3
+
+import sys
+import math
+
+if __name__ == "__main__":
+    l = int(sys.argv[1])
+    
+    k = 0
+    d = 0
+    i = 1
+    while d < l:
+        ld = math.log(i, 2)
+        # check wether ld has no decimals => i is a power of 2
+        if int(ld) == ld:
+            k += 1
+        else:
+            d += 1
+        i += 1
+    
+    print(k)

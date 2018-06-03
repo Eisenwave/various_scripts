@@ -1,0 +1,17 @@
+#!/bin/bash
+
+if test -z "$1"; then
+    >&2 echo "Usage: $(basepath "$0") <file> [bitrate in kB/s]"
+    exit
+fi
+
+if test -n "$2"; then
+    bitrate=$2K
+else
+    bitrate=128K
+fi
+
+echo $bitrate
+#exit
+
+ffmpeg -i "$1" -c:a mp3 -b:a "${bitrate}" -compression_level 0 -vn "${1%.*}.mp3"

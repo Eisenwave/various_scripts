@@ -1,0 +1,2 @@
+#!/bin/bash
+ffmpeg -i "$1" -c flac -compression_level 12 "${1%.*}.flac"

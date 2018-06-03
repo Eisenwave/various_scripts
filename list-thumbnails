@@ -1,0 +1,8 @@
+#!/bin/bash
+
+if [ -z "$1" ]; then
+    >&2 echo Must provide video link!
+    exit 1
+fi
+
+youtube-dl $1 --list-thumbnails

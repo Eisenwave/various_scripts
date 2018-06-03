@@ -1,0 +1,185 @@
+#!/usr/bin/python3 
+
+import sys
+
+units_mass = {
+    "mg": 0.000001,
+    "milligram": 0.000001,
+    "milligrams": 0.000001,
+    
+    "cg": 0.00001,
+    "centigram": 0.00001,
+    "centigrams": 0.00001,
+    
+    "dg": 0.0001,
+    "decigram": 0.0001,
+    "decigrams": 0.0001,
+    
+    "g": 0.001,
+    "gram": 0.001,
+    "grams": 0.001,
+    
+    "kg": 1,
+    "kilo": 1,
+    "kilos": 1,
+    "kilogram": 1,
+    "kilograms": 1,
+    
+    "t": 1000,
+    "ton": 1000,
+    "tons": 1000,
+    "metric_ton": 1000,
+    "metric_tons": 1000,
+    
+    "lbs": 0.45359237,
+    "pound": 0.45359237,
+    "pounds": 0.45359237
+}
+
+units_digital_storage = {
+    "b": 1,
+    "bit": 1,
+    "bits": 1,
+    
+    "B": 8,
+    "byte": 8,
+    "bytes": 8,
+    
+    "kb": 1000,
+    "kilobit": 1000,
+    "kilobits": 1000,
+    
+    "kB": 8000,
+    "kilobyte": 8000,
+    "kilobytes": 8000,
+    
+    "mb": 1000000,
+    "megabit": 1000000,
+    "megabits": 1000000,
+    
+    "mB": 8000000,
+    "megabyte": 8000000,
+    "megabytes": 8000000    
+}
+
+units_distance = {
+    "mm": 0.001,
+    "millimeter": 0.001,
+    "millimeters": 0.001,
+    
+    "cm": 0.01,
+    "centimeter": 0.01,
+    "centimeters": 0.01,
+    
+    "dm": 0.1,
+    "decimeter": 0.1,
+    "decimeters": 0.1,
+    
+    "m": 1,
+    "meter": 1,
+    "meters": 1,
+    
+    "km": 1000,
+    "kilometer": 1000,
+    "kilometers": 1000,
+    
+    "in": 0.0254,
+    "inch": 0.0254,
+    "inches": 0.0254,
+    "\"": 0.0254,
+    
+    "ft": 0.3048,
+    "foot": 0.3048,
+    "feet": 0.3048,
+    
+    "y": 0.9144,
+    "yard": 0.9144,
+    "yards": 0.9144,
+    
+    "mile": 1609.344,
+    "miles": 1609.344,
+    
+    "ly": 9460730000000000,
+    "light_year": 9460730000000000,
+    "light_years": 9460730000000000
+}
+
+units_speed = {
+    "mph": 0.44704,
+    "miles_per_hour": 0.44704,
+    
+    "mps": 1,
+    "meters_per_second": 1,
+    
+    "kps": 1000,
+    "km_per_second": 1000,
+    "kilometers_per_second": 1000,
+    
+    "kmh": 0.277777777777778,
+    "kph": 0.277777777777778,
+    "km_per_hour": 0.277777777777778,
+    "kilometers_per_hour": 0.277777777777778,
+    
+    "c": 299792458,
+    "speed_of_light": 299792458,
+    "light_speed": 299792458
+}
+
+units_volume = {
+    "beerbarrel": 117.3478,
+    
+    "gallon_imperial": 4.54609,
+    "gallons_imperial": 4.54609,
+    
+    "gallon_us": 3.7854,
+    "gallons_us": 3.7854,
+    
+    "ml": 0.001,
+    "milliletre": 0.001,
+    "milliletres": 0.001,
+    "cm3": 0.001,
+    "cubic_centimeter": 0.001,
+    
+    "cl": 0.01,
+    "centilitre": 0.01,
+    "centilitres": 0.01,
+    
+    "dl": 0.1,
+    "decilitre": 0.1,
+    "decilitres": 0.1,
+    
+    "l": 1,
+    "litre": 1,
+    "litres": 1,
+    "dm3": 1,
+    "cubic_decimeter": 1,
+    
+    "m3": 1000,
+    "cubic_meter": 1000
+}
+
+tables = [units_digital_storage, units_distance, units_mass, units_speed, units_volume]
+
+if __name__ == "__main__":
+    if len(sys.argv) < 4:
+        print("Usage: <amount> <source-unit> <target-unit>")
+        exit(1)
+    
+    source_name = sys.argv[2]
+    target_name = sys.argv[3]
+    
+    for table in tables:
+        if source_name in table:
+            if target_name not in table:
+                print("Incompatible target unit", file=sys.stderr)
+                exit(1)
+            source = table[sys.argv[2]]
+            target = table[sys.argv[3]]
+            break
+    else:
+        print("Unknown source unit", file=sys.stderr)
+        exit(1)
+    
+    result = float(sys.argv[1]) * source / target
+    int_result = int(result)
+    print(result if result != int_result else int_result)

@@ -1,0 +1,62 @@
+#!/usr/bin/python3
+
+import sys
+import math
+
+def split(l):
+    if len(l) == 0:
+        return []
+    elif len(l) == 1:
+        return [l]
+    
+    desired = sum([pair[0] for pair in l]) / 2
+    previous = 0
+    current = 0
+    for i in range(len(l)):
+        current += l[i][0]
+        if current >= desired:
+            if abs(desired - current) > abs(desired - previous):
+                i -= 1
+            
+            first = []
+            second = []
+            
+            for j in range(0, i + 1):
+                pair = l[j]
+                first.append((pair[0], pair[1] + '0'))
+            for j in range(i + 1, len(l)):
+                pair = l[j]
+                second.append((pair[0], pair[1] + '1'))
+                
+            return [first, second]
+        previous = current
+
+if __name__ == "__main__":
+    propabilities = [float(arg) for arg in sys.argv[1:]]
+    l = [[(p, "") for p in sorted(propabilities, reverse=True)]]
+    
+    while True:
+        new = []
+        cont = False
+        for group in l:
+            if len(group) > 1:
+                cont = True
+            for subgroup in split(group):
+                    new.append(subgroup)
+        l = new
+        if not cont: break
+    
+    codelen = 0
+    entropy = 0
+    
+    for group in l:
+        pair = group[0]
+        propability = pair[0]
+        if propability != 0:
+            codelen += propability * len(pair[1])
+            entropy += propability * math.log(1 / propability, 2)
+        print(str(propability) + ": " + pair[1])
+        
+    print("Code-Length: " + str(codelen))
+    print("Entropy:     " + str(entropy))
+    print("Redundancy:  " + str(codelen - entropy))

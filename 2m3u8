@@ -1,0 +1,13 @@
+#!/bin/bash
+
+if [ -n "$1" ]; then
+    suffix="$1"
+else
+    suffix=mp3
+fi
+
+#echo ${suffix:-xxx}
+
+for f in *.$suffix; do
+    echo $f
+done > "${PWD##*/}.m3u8"

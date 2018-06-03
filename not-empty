@@ -1,0 +1,2 @@
+#!/bin/bash
+exit $( test "$(ls -A "${1:-$PWD}")" )

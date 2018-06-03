@@ -1,0 +1,18 @@
+#!/usr/bin/python3
+
+import sys
+import math
+from math import *
+
+if __name__ == "__main__":
+    if len(sys.argv) < 2:
+        exit(0)
+    
+    expression = " ".join(sys.argv[1:])
+    result=eval(expression)
+    if isinstance(result, float):
+        int_result=int(result)
+        if result == int_result:
+            result=int_result
+    
+    print(result)

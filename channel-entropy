@@ -1,0 +1,35 @@
+#!/usr/bin/python3
+
+import sys
+import math
+
+def entropy(*args):
+    result = 0
+    for p in args:
+        if p > 0:
+            result += p * math.log(1 / p, 2)
+    return result
+            
+
+if __name__ == "__main__":
+    args = [float(arg) for arg in sys.argv[1:]]
+    x0 = args[0]
+    x1 = args[1]
+    t00 = args[2]
+    t01 = args[3]
+    t10 = args[4] if len(args) > 4 else t01
+    t11 = args[5] if len(args) > 4 else t00
+    
+    y0 = x0 * t00 + x1 * t10
+    y1 = x1 * t11 + x0 * t01
+    
+    hy = entropy(y0, y1)
+    hyx = x0 * entropy(t00, t01) + x1 * entropy(t10, t11)
+    ht = hy - hyx
+    
+    print("(p(x)) = (" + str(x0) + " " + str(x1) + ")")
+    print("(p(y)) = (" + str(y0) + " " + str(y1) + ")")
+    print("H(X) = " + str(entropy(x0, x1)))
+    print("H(Y) = " + str(hy))
+    print("H(Y|X) = " + str(hyx))
+    print("H_T = " + str(ht))
