@@ -1,0 +1,14 @@
+#!/bin/bash
+
+is_alive_ping() {
+  ping -q -c 1 $1 &> /dev/null
+  [[ $? == 0 ]] && echo $i is up
+}
+
+for i in 192.168.0.{1..255}; do
+    is_alive_ping $i & disown
+done
+
+# sleep just a little so that our PS1 (usually) gets printed after
+# all the messages have been sent by this script
+sleep 0.5s

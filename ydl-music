@@ -7,11 +7,12 @@ echoerr=">&2 echo"
 #     exit 1
 # fi
 
-if [ -n "$2" ]; then
-    codec=$2
-else
-    codec=aac
-fi
+#if [ -n "$1" ]; then
+#    codec=$1
+#else
+#    codec=aac
+# fi
+codec=$1
 
 if [ $codec = "opus" ]; then
     ext=webm
@@ -26,7 +27,7 @@ fi
 # i, --ignore-errors: continue download on errors
 # --playlist-start: playlist start or default 1
 args=( "$@" )
-youtube-dl $1 -f ${ideal}/bestaudio[ext=$ext] -o "%(title)s (%(id)s) [%(acodec)s %(abr)dkbps].%(ext)s" --extract-audio --audio-format "$codec" ${args[@]:2}
+youtube-dl $2 -f ${ideal}/bestaudio[ext=$ext] -o "%(title)s (%(id)s) [%(acodec)s %(abr)dkbps].%(ext)s" --extract-audio --audio-format "$codec" ${args[@]:2}
 
 for source in *; do
     #source="${f%.playlist_dl}"
