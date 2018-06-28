@@ -1,0 +1,21 @@
+#!/bin/bash 
+# This script uses curl and amazon web services
+# to detect changes in the user's IP-address.
+# Whenever such a change occurrs, the old and new
+# ip are printed on separate lines.
+
+IPPATH="$HOME/.ip"
+
+if [[ -a $IPPATH ]]; then
+    old=$(< $IPPATH)
+else
+    old=""
+fi
+
+new=$(curl -s checkip.amazonaws.com)
+
+if [[ "$old" != "$new" ]]; then
+    echo "$new" > $IPPATH
+    echo $old
+    echo $new
+fi
