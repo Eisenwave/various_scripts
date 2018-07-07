@@ -45,6 +45,6 @@ for source in *; do
     # if the file has been saved as ".opus" by youtube-dl, rename it to .oga
     elif [[ $source == *.opus ]]; then
         #ffmpeg -i "$source" -c:a copy "${source%.*}.oga"
-        mv "$source" "${source%.opus}.oga"
+        mv "$source" "${source%.opus}.ogg"
     fi
 done
