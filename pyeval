@@ -4,12 +4,26 @@ import sys
 import math
 from math import *
 
+def preprocess(expression):
+    expression = expression.replace("¹", "**1")
+    expression = expression.replace("²", "**2")
+    expression = expression.replace("³", "**3")
+    expression = expression.replace("⁴", "**4")
+    expression = expression.replace("⁵", "**5")
+    expression = expression.replace("⁶", "**6")
+    expression = expression.replace("⁷", "**7")
+    expression = expression.replace("⁸", "**8")
+    expression = expression.replace("⁹", "**9")
+    expression = expression.replace("½", "0.5")
+    expression = expression.replace("¼", "0.25")
+    return expression
+
 if __name__ == "__main__":
     if len(sys.argv) < 2:
         exit(0)
     
     expression = " ".join(sys.argv[1:])
-    result=eval(expression)
+    result = eval(preprocess(expression))
     if isinstance(result, float):
         int_result=int(result)
         if result == int_result:
