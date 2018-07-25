@@ -18,6 +18,12 @@ def preprocess(expression):
     expression = expression.replace("¼", "0.25")
     return expression
 
+def isum(*args):
+    result=0
+    for arg in args:
+        result += 1 / arg
+    return 1 / result
+
 if __name__ == "__main__":
     if len(sys.argv) < 2:
         exit(0)
