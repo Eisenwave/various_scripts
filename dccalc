@@ -1,0 +1,45 @@
+#!/usr/bin/python3
+
+
+import sys
+import operator
+
+chars = [
+    '_',
+    'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
+    'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
+    '.', '!', '?'
+]
+
+operations = {
+    '+': operator.add,
+    '-': operator.sub
+}
+
+def op_msg(a, b, op):
+    if len(a) != len(b):
+        raise Exception()
+    result = []
+    
+    for i in range(len(a)):
+        result += chars[ op(chars.index(a[i]), chars.index(b[i])) % len(chars) ]
+    
+    return ''.join(result)
+
+def show_msg(msg):
+    result = []
+    for i in range(len(msg)):
+        result.append(chars.index(msg[i]))
+    return str(result)
+
+if __name__ == "__main__":
+    result = sys.argv[1]
+    for i in range(2, len(sys.argv), 2):
+        op = sys.argv[i]
+        if op == '?':
+            result = show_msg(result)
+            break
+        arg = sys.argv[i + 1]
+        result = op_msg(result, arg, operations[op])
+    
+    print(result)

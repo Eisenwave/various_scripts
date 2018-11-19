@@ -1,6 +1,7 @@
 #!/bin/bash
 
-echoerr=">&2 echo"
+echoerr='>&2 echo'
+#alias echoerr="eval $echoerr"
 
 # if not-empty; then
 #     eval $echoerr Working directory must be empty!
@@ -17,17 +18,22 @@ codec=$1
 if [ $codec = "opus" ]; then
     ext=webm
     ideal=251
-elif [ codec = "aac" ]; then
+    extract_audio="--extract-audio --audio-format opus"
+elif [ $codec = "aac" ]; then
     ext=m4a
     ideal=140
-fi 
+    extract_audio=""
+else
+    >&2 printf "Usage: $(basename $0) (opus|aac) <youtube-dl args...>\n"
+    exit 1
+fi
 
 # f: format
 # o: output
 # i, --ignore-errors: continue download on errors
 # --playlist-start: playlist start or default 1
 args=( "$@" )
-youtube-dl $2 -f ${ideal}/bestaudio[ext=$ext] -o "%(title)s (%(id)s) [%(acodec)s %(abr)dkbps].%(ext)s" --extract-audio --audio-format "$codec" ${args[@]:2}
+youtube-dl $2 -f ${ideal}/bestaudio[ext=$ext] -o "%(title)s (%(id)s) [%(acodec)s %(abr)dkbps].%(ext)s" $extract_audio ${args[@]:2}
 
 for source in *; do
     #source="${f%.playlist_dl}"
@@ -42,9 +48,9 @@ for source in *; do
             mv "$source" "$target";
         fi
         
-    # if the file has been saved as ".opus" by youtube-dl, rename it to .oga
+    # if the file has been saved as ".opus" by youtube-dl, rename it to .ogg
     elif [[ $source == *.opus ]]; then
-        #ffmpeg -i "$source" -c:a copy "${source%.*}.oga"
         mv "$source" "${source%.opus}.ogg"
     fi
+    
 done

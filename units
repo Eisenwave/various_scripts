@@ -125,6 +125,19 @@ units_speed = {
     "light_speed": 299792458
 }
 
+units_temperature = {
+    "k": (0, 1),
+    "°k": (0, 1),
+    "kelvin": (0, 1),
+    
+    "c": (273.15, 1),
+    "°c": (273.15, 1),
+    "celsius": (273.15, 1),
+    
+    "f": (459.67, 1.8),
+    "fahrenheit": (459.67, 1.8)
+}
+
 units_volume = {
     "beerbarrel": 117.3478,
     
@@ -165,21 +178,33 @@ if __name__ == "__main__":
         print("Usage: <amount> <source-unit> <target-unit>")
         exit(1)
     
+    amount = sys.argv[1]
     source_name = sys.argv[2]
     target_name = sys.argv[3]
+    
+    if source_name in units_temperature:
+        if target_name not in units_temperature:
+            print("Incompatible target unit", file=sys.stderr)
+            exit(1)
+        source_transform = units_temperature[source_name]
+        target_transform = units_temperature[target_name]
+        result = ( float(amount) + source_transform[0] ) / source_transform[1] * target_transform[1] - target_transform[0]
+        int_result = int(result)
+        print(result if result != int_result else int_result)
+        exit(0)
     
     for table in tables:
         if source_name in table:
             if target_name not in table:
                 print("Incompatible target unit", file=sys.stderr)
                 exit(1)
-            source = table[sys.argv[2]]
-            target = table[sys.argv[3]]
+            source = table[source_name]
+            target = table[target_name]
             break
     else:
         print("Unknown source unit", file=sys.stderr)
         exit(1)
     
-    result = float(sys.argv[1]) * source / target
+    result = float(amount) * source / target
     int_result = int(result)
     print(result if result != int_result else int_result)
