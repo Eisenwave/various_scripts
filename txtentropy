@@ -1,0 +1,39 @@
+#!/usr/bin/python3
+
+"""
+Reads plaintext or data from stdin and prints the entropy of the text as a number.
+"""
+
+import sys
+import math
+
+from sys import stdin, stdout
+from math import log
+
+def entropy(p):
+    return p * -log(p, 2)
+
+if __name__ == "__main__":
+    in_len = 0
+    amounts = {}
+
+    for line in stdin:
+        for char in line:
+            in_len += 1
+            index = ord(char)
+            if index in amounts:
+                amounts[ord(char)] += 1
+            else:
+                amounts[ord(char)] = 1
+    
+    alpha_size = min(256, in_len)
+    amounts = amounts.values()
+    amounts = [e / alpha_size for e in amounts]
+    
+    ent = 0
+    for e in amounts:
+        ent += entropy(e)
+    red = in_len * entropy(1 / alpha_size) - ent
+    # print(amounts)
+    print("Entropy: %f\nRedundancy: %f" % (ent, red))
+

@@ -1,5 +1,10 @@
 #!/usr/bin/python3
 
+"""
+Takes a probability distribution in the form of x0 x1 ... xN as program arguments
+and returns the calculated entropy as a number in stdout.
+"""
+
 import sys
 import math
 
