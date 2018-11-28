@@ -1,5 +1,12 @@
 #!/usr/bin/python3 
 
+"""
+Converts between different units of mass, digital storage units, distance units,
+temperature units, voumetric units.
+
+Usage: units <amount> <input-unit> <output-unit>
+"""
+
 import sys
 
 units_mass = {

@@ -1,4 +1,9 @@
 #!/bin/bash
+
+# Swaps the extensions of all files in the working directory with a source extension for a target extension.
+#
+# Usage: swapext <source extension> <target extension>
+
 src_ext=.$1
 
 if test -z "$1" || test -z "$2"; then

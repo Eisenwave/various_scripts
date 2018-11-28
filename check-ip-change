@@ -1,5 +1,6 @@
 #!/bin/bash 
-# This script uses curl and amazon web services
+
+# This script uses curl and amazon web services (checkip.amazonaws.com)
 # to detect changes in the user's IP-address.
 # Whenever such a change occurrs, the old and new
 # ip are printed on separate lines.

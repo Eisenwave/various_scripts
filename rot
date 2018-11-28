@@ -1,5 +1,16 @@
 #!/usr/bin/python3
 
+"""
+Applies the ROT encryption algorithm to input read from stdin.
+(commonly known as Caesar Cipher)
+
+This will shift all alphabetic characters by the given rotation.
+Case is preserved by this operation.
+
+All digits and other non-alphabetic characters are not affected by the rotation.
+Usage: rot <rotation>
+"""
+
 import sys
 
 if __name__ == "__main__":
