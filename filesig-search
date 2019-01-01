@@ -1,0 +1,27 @@
+#!/usr/bin/python3
+
+"""
+Searches for file signatures within a given stream of binary data or file.
+All matching types and their byte offsets within the stream or file are printed to stdout.
+
+Dependencies: python-magic
+"""
+
+import magic
+import sys
+from sys import stdin, stdout
+
+
+if __name__ == "__main__":
+    buffer = stdin.buffer
+    pos = 0
+
+    while True:
+        header = buffer.peek(64)
+        result = magic.from_buffer(header, mime=True)
+        if len(buffer.read(1)) == 0:
+            break
+        pos += 1
+
+        if result != "application/octet-stream":
+            print(str(pos).zfill(3) + ": " + result)
