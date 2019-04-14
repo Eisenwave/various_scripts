@@ -1,0 +1,15 @@
+#!/usr/bin/python3 
+
+import sys
+
+if __name__ == '__main__':
+    charmap = {}
+    
+    for sub in sys.argv:
+        charmap[sub[0]] = sub[1]
+        charmap[sub[1]] = sub[0]
+    
+    for line in sys.stdin:
+        for c in line:
+            sys.stdout.write(charmap[c] if c in charmap else c)
+    

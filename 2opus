@@ -9,4 +9,4 @@ fi
 input="$1"
 filename="${input%.*}"
 
-ffmpeg -i "$input" -b:a "${bitrate}000" -c:a opus -vbr on -compression_level 10 -application audio -vn "$filename.ogg"
+ffmpeg -i "$input" -b:a "${bitrate}000" -c:a opus -strict -2 -vbr on -compression_level 10 -application audio -vn "$filename.ogg"

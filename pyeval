@@ -2,9 +2,18 @@
 
 import sys
 import math
+import itertools
+import random
+
 from math import *
+from itertools import count, takewhile
+from collections.abc import Iterable
+from functools import reduce
+from random import Random
 
 def preprocess(expression):
+    expression = expression.replace("↑", "**")
+    expression = expression.replace("⁰", "**0")
     expression = expression.replace("¹", "**1")
     expression = expression.replace("²", "**2")
     expression = expression.replace("³", "**3")
@@ -16,19 +25,203 @@ def preprocess(expression):
     expression = expression.replace("⁹", "**9")
     expression = expression.replace("½", "0.5")
     expression = expression.replace("¼", "0.25")
+    expression = expression.replace("⅛", "0.125")
+    expression = expression.replace("sum(", "varargs_sum(")
     return expression
 
-def isum(*args):
+def invsum(*args):
     result=0
+    if len(args) == 1 and isinstance(args[0], Iterable):
+        args = args[0]
     for arg in args:
         result += 1 / arg
     return 1 / result
+
+def avg(*args):
+    if not args:
+        return None
+    if len(args) == 1 and isinstance(args[0], Iterable):
+        args = args[0]
+    return sum(args) / len(args)
+
+def varargs_sum(*args):
+    if not args:
+        return 0
+    return sum(args[0]) if len(args) == 1 and isinstance(args[0], Iterable) else sum(args)
+
+def product(*args):
+    if len(args) == 1 and isinstance(args[0], Iterable):
+        args = args[0]
+    return reduce(lambda x,y: x*y, args, 1)
+
+def modpow(base, exponent, modulus):
+    if modulus == 1:
+        return 0
+    # Assert :: (modulus - 1) * (modulus - 1) does not overflow base
+    result = 1
+    base = base % modulus
+    while exponent > 0:
+        if exponent & 1 == 1:
+           result = (result * base) % modulus
+        exponent >>= 1
+        base = (base * base) % modulus
+    return result
+
+def choose(n, k):
+    return product(n + 1 - i for i in range(1, k + 1)) // factorial(k)
+
+def clamp(l, n, r):
+    return l if n <= l else r if n >= r else n
+
+def primegen():
+    # Recursive sieve of Eratosthenes excluding 0
+    yield 2; yield 3; yield 5; yield 7; yield 11; yield 13;
+    ps = primegen()
+    p = next(ps) and next(ps)
+    q, sieve, n = p**2, {}, 13
+    while True:
+        if n not in sieve:
+            if n < q: yield n
+            else:
+                nxt, step = q + 2*p, 2*p
+                while nxt in sieve: nxt += step
+                sieve[nxt] = step
+                p = next(ps)
+                q = p**2
+        else:
+            step = sieve.pop(n)
+            nxt = n + step
+            while nxt in sieve: nxt += step
+            sieve[nxt] = step
+        n += 2
+
+def pigen():
+    q, r, t, k, m, x = 1, 0, 1, 1, 3, 3
+    while True:
+        if 4 * q + r - t < m * t:
+            yield m
+            q, r, t, k, m, x = 10*q, 10*(r-m*t), t, k, (10*(3*q+r))//t - 10*m, x
+        else:
+            q, r, t, k, m, x = q*k, (2*q+r)*x, t*x, k+1, (q*(7*k+2)+r*x)//(t*x), x+2
+
+def nnn(i):
+    print(i)
+    return i
+
+index = 0
+
+def pidigs(n):
+    def inc_index(digit):
+        global index
+        index += 1
+        return index <= n
+    
+    result = list(takewhile(inc_index, pigen()))
+    index = 0
+    return result
+
+def pidig(n):
+    def inc_index(digit):
+        global index
+        index += 1
+        return index <= n + 1
+    
+    result = None
+    for result in takewhile(inc_index, pigen()):
+        pass
+    index = 0
+    return result
+
+def pidecs(n):
+    return pidigs(n + 1)[1:]
+
+def pidec(n):
+    return pidig(n + 1)
+
+def primes(limit):
+    return [0] + list(takewhile(lambda p: p < limit, primegen()))
+
+def isfermatprime(n, random=None):
+    if random is None:
+        random = Random()
+    a = random.randint(2, max(2, n // 2 - 1))
+    return modpow(a, n - 1, n) == 1
+
+def isprime(n):
+    return n >= 0 \
+    and isfermatprime(n) \
+    and (n == 0 or n in takewhile(lambda p: p <= n, primegen()))
+
+def _add_or_inc(d, key):
+    if key in d:
+        d[key] += 1
+    else:
+        d[key] = 1
+
+def _primefacs(n, result):
+    lim = ceil(sqrt(n))
+    for i in takewhile(lambda p: p <= lim, primegen()):
+        if n % i == 0:
+            _add_or_inc(result, i)
+            return _primefacs(n // i, result)
+    _add_or_inc(result, n)
+
+def primefacs(n):
+    result = dict()
+    _primefacs(n, result)
+    return result
+
+def eulerphi(n, primes=None):
+    # calculates Euler's totient function for a given number n in O(n)
+    # optionally, n's prime factors may be given which reduces the complexity to O(len(primes))
+    if primes is None:
+        primes = primefacs(n).keys()
+    return n * product(p - 1 for p in primes) // product(p for p in primes)
+
+def phi(n, primes=None):
+    return eulerphi(n, primes)
+
+# def factorial(n):
+#     return reduce(lambda x,y: x * y, (i for i in range(1, n+1)), 1)
+
+def dot(v0, v1):
+    return v0[0] * v1[0] + v0[1] * v1[1] + v0[2] * v1[2]
+
+def cross(v0, v1):
+    return [
+        v0[1] * v1[2] - v0[2] * v1[1],
+        v0[2] * v1[0] - v0[0] * v1[2],
+        v0[0] * v1[1] - v0[1] * v1[0]
+    ]
+
+def gcd(x, y):
+    # calculates greatest common divisor using euclidean algorithm
+    a = max(x, y)
+    b = min(x, y)
+    if b == 0:
+        return None
+    c = a % b
+    while c != 0:
+        a = b
+        b = c
+        c = a % b
+    return b
+
+def ld(n):
+    return log2(n)
+
+def lcm(x, y):
+    # x * y = gcd(x, y) * lcm(x, y)
+    return x * y / gcd(x, y)
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
         exit(0)
     
-    expression = " ".join(sys.argv[1:])
+    expression = " ".join(sys.argv[1:]).strip()
+    if not expression:
+        exit(0)
+        
     result = eval(preprocess(expression))
     if isinstance(result, float):
         int_result=int(result)

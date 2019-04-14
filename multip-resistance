@@ -1,0 +1,38 @@
+#!/usr/bin/python3
+
+# Searches for numbers with high multiplication resistance naively
+# See: https://www.youtube.com/watch?v=Wim9WJeDTHQ
+
+def inc_dec(d):
+    for i in range(len(d)):
+        if d[i] == 9:
+            d[i] = 0
+            i += 1
+        else:
+            d[i] += 1
+            break
+    else:
+        d.append(1)
+
+def product(d):
+    result = 1
+    for digit in d:
+        if digit == 0:
+            return 0
+        result *= digit
+    return result
+
+if __name__ == "__main__":
+    i_dec = [0, 1]
+    cache = [0] * 10
+    record = [0, 0]
+    
+    for i in range(10, 2**32):
+        p = product(i_dec)
+        result = cache[p] + 1
+        cache.append(result)
+        inc_dec(i_dec)
+        if result > record[0]:
+            record = [result, i]
+            print(record)
+        
