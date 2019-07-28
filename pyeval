@@ -5,11 +5,17 @@ import math
 import itertools
 import random
 
+import polynomial
+import modulus
+
 from math import *
 from itertools import count, takewhile
 from collections.abc import Iterable
 from functools import reduce
 from random import Random
+
+from polynomial import Polynomial as P
+from modulus import *
 
 def preprocess(expression):
     expression = expression.replace("↑", "**")
@@ -53,19 +59,6 @@ def product(*args):
     if len(args) == 1 and isinstance(args[0], Iterable):
         args = args[0]
     return reduce(lambda x,y: x*y, args, 1)
-
-def modpow(base, exponent, modulus):
-    if modulus == 1:
-        return 0
-    # Assert :: (modulus - 1) * (modulus - 1) does not overflow base
-    result = 1
-    base = base % modulus
-    while exponent > 0:
-        if exponent & 1 == 1:
-           result = (result * base) % modulus
-        exponent >>= 1
-        base = (base * base) % modulus
-    return result
 
 def choose(n, k):
     return product(n + 1 - i for i in range(1, k + 1)) // factorial(k)
@@ -170,13 +163,6 @@ def primefacs(n):
     result = dict()
     _primefacs(n, result)
     return result
-
-def eulerphi(n, primes=None):
-    # calculates Euler's totient function for a given number n in O(n)
-    # optionally, n's prime factors may be given which reduces the complexity to O(len(primes))
-    if primes is None:
-        primes = primefacs(n).keys()
-    return n * product(p - 1 for p in primes) // product(p for p in primes)
 
 def phi(n, primes=None):
     return eulerphi(n, primes)
