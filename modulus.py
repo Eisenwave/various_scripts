@@ -25,10 +25,3 @@ def mulinv(x, mod = None):
     Returns modinv(x, mod) if a mod is given, else 1 / x.
     """
     return 1 / x if mod == None else modinv(x, mod)
-    
-def eulerphi(n, primes=None):
-    # calculates Euler's totient function for a given number n in O(n)
-    # optionally, n's prime factors may be given which reduces the complexity to O(len(primes))
-    if primes is None:
-        primes = primefacs(n).keys()
-    return n * product(p - 1 for p in primes) // product(p for p in primes) 
