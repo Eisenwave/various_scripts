@@ -1,3 +1,0 @@
-#!/bin/bash
-
-java -jar /home/user/IdeaProjects/nbtpad/out/artifacts/nbtpad_jar/nbtpad.jar $@

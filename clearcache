@@ -7,6 +7,3 @@ rm -rf "$HOME/.config/discord/Cache/"
 rm -rf "$HOME/.config/Slack/Cache/"
 
 rm -f "$HOME/.local/share/baloo/index"
-
-#rm -f "$HOME/.kde/share/apps/amarok/mysqle/ib_logfile0"
-#rm -f "$HOME/.kde/share/apps/amarok/mysqle/ib_logfile1"

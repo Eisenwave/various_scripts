@@ -6,7 +6,7 @@
 
 src_ext=.$1
 
-if test -z "$1" || test -z "$2"; then
+if [ -z "$1" ] || [ -z "$2" ]; then
     >&2 echo "Usage: $(basename "$0") <source extension> <target extension>"
     exit
 fi
