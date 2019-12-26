@@ -1,5 +1,0 @@
-#!/bin/bash
-
-youtube-dl -f 251/250/249 -o "%(title)s (%(id)s) [%(acodec)s %(abr)skbps].%(ext)s" --extract-audio --audio-format opus "$@"
-
-for f in *.opus; do mv "$f" "${f%.opus}.ogg"; done

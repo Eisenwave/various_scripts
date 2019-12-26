@@ -1,2 +1,0 @@
-#!/bin/bash
-youtube-dl -o "%(uploader)s - %(title)s (%(id)s) [%(vcodec)s %(height)sp] [%(acodec)s %(abr)skbps].%(ext)s" $@
