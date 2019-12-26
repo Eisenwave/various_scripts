@@ -1,18 +1,20 @@
 #!/bin/bash
 
-"""
-Lists all pingable IPs on the local network.
-"""
+# Lists all pingable IPs on the local network.
 
-is_alive_ping() {
-  ping -q -c 1 $1 &> /dev/null
-  [[ $? == 0 ]] && echo $i is up
+PING_COUNT=1
+TIMEOUT_SECONDS=1
+
+function is_alive_ping {
+    ping -q -c $PING_COUNT -W $TIMEOUT_SECONDS "$1" &> /dev/null
+    
+    if [[ $? == 0 ]]; then
+        printf '%s is up\n' "$i"
+    fi
 }
 
 for i in 192.168.0.{1..255}; do
-    is_alive_ping $i & disown
+    is_alive_ping $i &
 done
 
-# sleep just a little so that our PS1 (usually) gets printed after
-# all the messages have been sent by this script
-sleep 0.5s
+wait
