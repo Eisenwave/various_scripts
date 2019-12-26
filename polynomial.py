@@ -44,7 +44,12 @@ class Polynomial:
             if coeff != 0:
                 result.append((str(coeff) if coeff != 1 or d == 0 else "") + ("x^" + str(d) if d > 1 else "x" if d == 1 else ""))
             d -= 1
-        return " + ".join(result)
+            
+        result_str = result[0]
+        for i in range(1, len(result)):
+            ele = result[i]
+            result_str += (" - " + ele[1:]) if ele[0] == '-' else (" + " + ele)
+        return result_str
     
     def __init__(self, *args):
         if len(args) == 1:
