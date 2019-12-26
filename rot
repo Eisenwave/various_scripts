@@ -13,21 +13,23 @@ Usage: rot <rotation>
 
 import sys
 
+def do_rot(c, rot):
+    c = ord(c)
+    if c >= ord('A') and c <= ord('Z'):
+        result = (c + rot) % 91
+        if result < ord('A'):
+            result += ord('A')
+        return chr(result)
+    elif c >= ord('a') and c <= ord('z'):
+        result = (c + rot) % 123
+        if result < ord('a'):
+            result += ord('a')
+        return chr(result)
+    else:
+        return chr(c)
+
 if __name__ == "__main__":
-    rot = int(sys.argv[1]) % 26
+    rot = int(sys.argv[1]) % 26 if len(sys.argv) > 1 else 3
     for line in sys.stdin:
         for c in line:
-            c = ord(c)
-            # char = c if not c.isalpha() else (c + rot) % 91 + 65 if c >= 'a' else (c + rot) % 123 + 97
-            if c >= ord('A') and c <=ord('Z'):
-                result = (c + rot) % 91
-                if result <= ord('A'):
-                    result += ord('A')
-            elif c >= ord('a') and c <= ord('z'):
-                result = (c + rot) % 123
-                if result <= ord('a'):
-                    result += ord('a')
-            else:
-                result = c
-
-            sys.stdout.write(chr(result))
+            sys.stdout.write(do_rot(c, rot))
